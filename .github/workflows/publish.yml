@@ -1,4 +1,4 @@
-name: 每日自动发布公众号
+name: 名称：每日自动发布公众号
 
 on:
   schedule:
@@ -23,7 +23,7 @@ jobs:
       - name: 运行程序生成报告
         run: python valuation_wechat.py
 
-      - name: 发布到公众号草稿箱
+      - name: 发布到公众号
         env:
           WECHAT_APP_ID: ${{ secrets.WECHAT_APP_ID }}
           WECHAT_APP_SECRET: ${{ secrets.WECHAT_APP_SECRET }}
