@@ -26,6 +26,17 @@ jobs:
       - name: 安装发布工具
         run: npm install -g @wenyan-md/cli
 
+      - name: 调试 - 检查环境变量
+        run: |
+          echo "WECHAT_APP_ID is set: ${{ secrets.WECHAT_APP_ID != '' }}"
+          echo "WECHAT_APP_SECRET is set: ${{ secrets.WECHAT_APP_SECRET != '' }}"
+
+      - name: 调试 - 测试 wenyan 配置
+        env:
+          WECHAT_APP_ID: ${{ secrets.WECHAT_APP_ID }}
+          WECHAT_APP_SECRET: ${{ secrets.WECHAT_APP_SECRET }}
+        run: wenyan config --list
+
       - name: 发布到公众号草稿箱
         env:
           WECHAT_APP_ID: ${{ secrets.WECHAT_APP_ID }}
