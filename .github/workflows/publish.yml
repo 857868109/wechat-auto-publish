@@ -1,4 +1,4 @@
-name: 名称：每日自动发布公众号
+name: 每日自动发布公众号
 
 on:
   schedule:
