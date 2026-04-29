@@ -30,4 +30,4 @@ jobs:
         env:
           WECHAT_APP_ID: ${{ secrets.WECHAT_APP_ID }}
           WECHAT_APP_SECRET: ${{ secrets.WECHAT_APP_SECRET }}
-        run: python publish_to_wechat.py
+        run: python valuation_wechat.py
