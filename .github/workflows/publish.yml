@@ -18,7 +18,10 @@ jobs:
           python-version: '3.10'
 
       - name: 安装依赖
-        run: pip install requests
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip list
 
       - name: 运行程序生成报告
         run: python valuation_wechat.py
