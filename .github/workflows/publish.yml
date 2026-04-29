@@ -21,7 +21,6 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip list
 
       - name: 运行程序生成报告
         run: python valuation_wechat.py
@@ -30,4 +29,4 @@ jobs:
         env:
           WECHAT_APP_ID: ${{ secrets.WECHAT_APP_ID }}
           WECHAT_APP_SECRET: ${{ secrets.WECHAT_APP_SECRET }}
-        run: python valuation_wechat.py
+        run: python publish_to_wechat.py   # ← 这一行必须是 publish_to_wechat.py
