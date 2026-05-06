@@ -1,49 +1,53 @@
-import requests
 import json
+import urllib.request
 
-# ============ 先直接写死密钥，测试能否跑通 ============
-APPID = "wxa579f1d1929ae9b6"
-APPSECRET = "ca2df108070a17590779ec5c746bc6ac"
+def send_wecom_message():
+    # 你的企业微信配置
+    CORPID = "ww9fc85f8c79338abd"
+    CORPSECRET = "TXlhV-99MmaHlKV-sFw-m0jwSfeghc0QXPez8aVF8P4"
+    AGENTID = 1000002
+    USERID = "LiangHongJiang"
 
-def get_access_token():
-    url = f"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={APPID}&secret={APPSECRET}"
-    res = requests.get(url, timeout=15).json()
-    print("获取 access_token 结果：", res)
-    return res.get("access_token")
+    print("开始获取企业微信 Token...")
 
-def create_draft(access_token):
-    url = f"https://api.weixin.qq.com/cgi-bin/draft/add?access_token={access_token}"
-
-    data = {
-        "articles": [
-            {
-                "title": "股市晴雨表 2026-05-06",
-                "author": "自动发布",
-                "content": "<p>今日股市平稳运行</p>",
-                "digest": "自动生成草稿",
-                "thumb_media_id": "",
-                "need_open_comment": 1,
-                "only_fans_can_comment": 0
-            }
-        ]
-    }
-
-    response = requests.post(url, json=data, timeout=15)
-    print("微信返回：", response.text)
-    return response.json()
-
-def main():
-    print("=== 公众号自动发布脚本开始运行 ===")
-    token = get_access_token()
-    if not token:
-        print("❌ 获取 access_token 失败")
+    # 1. 获取 access_token
+    try:
+        token_url = f"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={CORPID}&corpsecret={CORPSECRET}"
+        with urllib.request.urlopen(token_url, timeout=10) as resp:
+            token_data = json.loads(resp.read())
+        access_token = token_data["access_token"]
+        print("✅ Token 获取成功")
+    except Exception as e:
+        print(f"❌ 获取Token失败: {e}")
         return
 
-    result = create_draft(token)
-    if result.get("errcode") == 0:
-        print("✅ 草稿创建成功！去公众号后台查看")
-    else:
-        print("❌ 失败：", result)
+    # 2. 发送消息
+    try:
+        send_url = f"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}"
+        data = {
+            "touser": USERID,
+            "msgtype": "text",
+            "agentid": AGENTID,
+            "text": {
+                "content": "✅ GitHub Actions 推送成功！\n📊 基金日报自动推送系统已上线"
+            },
+            "safe": 0
+        }
+        req = urllib.request.Request(
+            send_url,
+            data=json.dumps(data, ensure_ascii=False).encode("utf-8"),
+            headers={"Content-Type": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            result = json.loads(resp.read())
+        
+        if result.get("errcode") == 0:
+            print("✅ 消息发送成功！请打开企业微信查看")
+        else:
+            print(f"❌ 发送失败: {result}")
+
+    except Exception as e:
+        print(f"❌ 发送异常: {e}")
 
 if __name__ == "__main__":
-    main()
+    send_wecom_message()
