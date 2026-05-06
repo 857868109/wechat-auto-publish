@@ -1,16 +1,12 @@
 import requests
-import os
 import json
 
+# ============ 先直接写死密钥，测试能否跑通 ============
+APPID = "wxa579f1d1929ae9b6"
+APPSECRET = "ca2df108070a17590779ec5c746bc6ac"
+
 def get_access_token():
-    appid = os.getenv("WECHAT_APPID")
-    secret = os.getenv("WECHAT_APPSECRET")
-
-    if not appid or not secret:
-        print("❌ 错误：未配置 WECHAT_APPID 或 WECHAT_APPSECRET")
-        return None
-
-    url = f"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={appid}&secret={secret}"
+    url = f"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={APPID}&secret={APPSECRET}"
     res = requests.get(url, timeout=15).json()
     print("获取 access_token 结果：", res)
     return res.get("access_token")
@@ -37,8 +33,10 @@ def create_draft(access_token):
     return response.json()
 
 def main():
+    print("=== 公众号自动发布脚本开始运行 ===")
     token = get_access_token()
     if not token:
+        print("❌ 获取 access_token 失败")
         return
 
     result = create_draft(token)
