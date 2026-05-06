@@ -8,6 +8,11 @@ def send_wecom_message():
     AGENTID = 1000002
     USERID = "LiangHongJiang"
 
+    # 配置代理（用免费公开代理，可随时替换）
+    proxy_handler = urllib.request.ProxyHandler({'https': 'http://101.200.127.120:3128'})
+    opener = urllib.request.build_opener(proxy_handler)
+    urllib.request.install_opener(opener)
+
     print("开始获取企业微信 Token...")
 
     # 1. 获取 access_token
