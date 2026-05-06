@@ -2,8 +2,8 @@ name: 每日自动发布公众号
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天0点定时运行
-  workflow_dispatch:     # 支持手动触发
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   publish:
